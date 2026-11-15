@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tartilm</title>
+<meta name="theme-color" content="#0B2528">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  --bg:#EDF1EE;--surface:#FFFFFF;--ink:#12302F;--muted:#5B7370;--line:#D3DDD9;
+  --accent:#0F6B63;--on-accent:#FFFFFF;--gold:#B7800A;--ok:#1E8F5E;--err:#CC4036;--veil:#CBD8D3;
+  --ui:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --quran:"Amiri Quran","Amiri","Traditional Arabic","Scheherazade New",serif;
+  box-sizing:border-box;padding-top:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));color-scheme:light;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B2528;--surface:#12363A;--ink:#E7F1EC;--muted:#93AFA9;--line:#1F4A4E;
+    --accent:#5FD0B4;--on-accent:#06302B;--gold:#F0BE4D;--ok:#6FD3A0;--err:#FF7F70;--veil:#1D4A4D;color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B2528;--surface:#12363A;--ink:#E7F1EC;--muted:#93AFA9;--line:#1F4A4E;
+  --accent:#5FD0B4;--on-accent:#06302B;--gold:#F0BE4D;--ok:#6FD3A0;--err:#FF7F70;--veil:#1D4A4D;color-scheme:dark;
+}
+html{scroll-padding-top:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px))}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.45}
+body::before{content:"";position:fixed;inset:0 0 auto;height:max(env(safe-area-inset-top,0px),var(--safe-area-inset-top,0px));background:var(--bg);z-index:10}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible,input:focus-visible,.w:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+main{max-width:520px;margin:0 auto;padding:16px 16px 120px}
+h1,h2,h3{margin:0;line-height:1.2}
+.top{display:flex;align-items:center;justify-content:space-between;margin:6px 0 18px}
+.brand{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.chip{display:inline-flex;gap:6px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-weight:600;font-size:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px}
+.muted{color:var(--muted)}
+.sec{margin:26px 0 10px;font-size:18px;font-weight:700}
+.bar{height:10px;border-radius:99px;background:var(--veil);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+.goal{display:grid;gap:10px}
+.goal b{font-size:20px}
+.list{display:grid;gap:10px}
+.srow{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+.srow .num{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);font-weight:700;font-size:14px}
+.srow .num.done{border-color:var(--ok);color:var(--ok)}
+.srow .nm{flex:1}.srow .nm b{display:block}
+.srow .ar{font-family:var(--quran);font-size:26px;direction:rtl}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);display:flex;justify-content:center;padding-bottom:max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px));z-index:20}
+.nav-in{display:flex;width:100%;max-width:520px}
+.nav button{flex:1;display:grid;justify-items:center;gap:2px;padding:10px 4px 9px;font-size:12px;font-weight:600;color:var(--muted)}
+.nav button[aria-current="page"]{color:var(--accent)}
+svg.ic{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:var(--on-accent);border-radius:14px;padding:13px 20px;font-weight:700}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:9px 14px;font-size:14px;border-radius:12px}
+.seg{display:flex;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;padding:9px 6px;border-radius:10px;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.rtop{display:flex;align-items:center;gap:10px;margin:4px 0 14px}
+.rtop .back{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line)}
+.rtop h2{font-size:20px;flex:1}
+.page{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:22px 16px;margin-top:14px;direction:rtl;font-family:var(--quran);font-size:30px;line-height:2.25;text-align:justify;text-justify:inter-word;min-height:240px}
+.w{display:inline-block;padding:0 3px;border-radius:7px;cursor:default;transition:color .2s,background .2s}
+.w.hid{color:transparent;background:var(--veil);cursor:pointer;margin:0 1px;user-select:none}
+.w.cur{background:var(--gold);opacity:.55}
+.w.ok{color:var(--ok)}
+.w.err{color:var(--err);text-decoration:underline wavy;text-underline-offset:8px;cursor:pointer}
+.w.peek{color:var(--gold);cursor:default}
+.vend{font-size:.8em;color:var(--gold);padding:0 4px;white-space:nowrap;cursor:pointer}
+.vend.bm{background:var(--gold);color:var(--surface);border-radius:8px}
+.rbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);padding:12px 16px calc(12px + max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px)))}
+.rbar-in{max-width:520px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mic{width:68px;height:68px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;box-shadow:0 0 0 6px color-mix(in srgb,var(--accent) 22%,transparent)}
+.mic.on{background:var(--err);color:#fff;animation:pulse 1.4s infinite}
+.mic svg{width:30px;height:30px}
+@keyframes pulse{50%{box-shadow:0 0 0 14px color-mix(in srgb,var(--err) 12%,transparent)}}
+@media (prefers-reduced-motion:reduce){.mic.on{animation:none}.bar>i{transition:none}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font-size:24px}.stat span{font-size:13px;color:var(--muted)}
+.heat{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;gap:4px}
+.heat i{aspect-ratio:1;border-radius:4px;background:var(--veil)}
+.heat i.l1{background:color-mix(in srgb,var(--accent) 35%,var(--veil))}
+.heat i.l2{background:color-mix(in srgb,var(--accent) 65%,var(--veil))}
+.heat i.l3{background:var(--accent)}
+.erow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line)}
+.erow:last-child{border-bottom:0}
+.erow .a{font-family:var(--quran);font-size:26px;direction:rtl}
+.stepper{display:flex;align-items:center;gap:14px}
+.stepper button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);font-size:22px;font-weight:700}
+.field{width:100%;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:13px 14px;font:inherit;direction:rtl;font-family:var(--quran);font-size:22px}
+.res{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;display:grid;gap:8px;margin-top:10px}
+.res .ar{font-family:var(--quran);font-size:26px;line-height:2;direction:rtl}
+.sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:40;display:flex;align-items:flex-end;justify-content:center}
+.sheet{background:var(--surface);width:100%;max-width:520px;border-radius:22px 22px 0 0;padding:20px 18px calc(20px + max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px)));display:grid;gap:12px}
+.sheet .ar{font-family:var(--quran);font-size:34px;direction:rtl;text-align:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(110px + max(env(safe-area-inset-bottom,0px),var(--safe-area-inset-bottom,0px)));background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;max-width:88%;z-index:50;font-size:14px;text-align:center}
+.legend{display:flex;gap:14px;font-size:13px;color:var(--muted);flex-wrap:wrap;margin-top:8px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:currentColor}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<div id="layer"></div>
+<script>
+"use strict";
+/* ---------- Données ---------- */
+const SURAHS=[
+{id:1,off:1,fr:"Al-Fatiha",ar:"الفاتحة",tr:"L’ouverture",v:[
+"بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ","ٱلْحَمْدُ لِلَّهِ رَبِّ ٱلْعَٰلَمِينَ","ٱلرَّحْمَٰنِ ٱلرَّحِيمِ","مَلِكِ يَوْمِ ٱلدِّينِ","إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ","ٱهْدِنَا ٱلصِّرَٰطَ ٱلْمُسْتَقِيمَ","صِرَٰطَ ٱلَّذِينَ أَنْعَمْتَ عَلَيْهِمْ","غَيْرِ ٱلْمَغْضُوبِ عَلَيْهِمْ وَلَا ٱلضَّآلِّينَ"]},
+{id:103,fr:"Al-‘Asr",ar:"العصر",tr:"Le temps",v:[
+"وَٱلْعَصْرِ","إِنَّ ٱلْإِنسَٰنَ لَفِى خُسْرٍ","إِلَّا ٱلَّذِينَ ءَامَنُوا۟ وَعَمِلُوا۟ ٱلصَّٰلِحَٰتِ وَتَوَاصَوْا۟ بِٱلْحَقِّ وَتَوَاصَوْا۟ بِٱلصَّبْرِ"]},
+{id:108,fr:"Al-Kawthar",ar:"الكوثر",tr:"L’abondance",v:[
+"إِنَّآ أَعْطَيْنَٰكَ ٱلْكَوْثَرَ","فَصَلِّ لِرَبِّكَ وَٱنْحَرْ","إِنَّ شَانِئَكَ هُوَ ٱلْأَبْتَرُ"]},
+{id:112,fr:"Al-Ikhlas",ar:"الإخلاص",tr:"Le monothéisme pur",v:[
+"قُلْ هُوَ ٱللَّهُ أَحَدٌ","ٱللَّهُ ٱلصَّمَدُ","لَمْ يَلِدْ وَلَمْ يُولَدْ","وَلَمْ يَكُن لَّهُۥ كُفُؤًا أَحَدٌۢ"]},
+{id:113,fr:"Al-Falaq",ar:"الفلق",tr:"L’aube naissante",v:[
+"قُلْ أَعُوذُ بِرَبِّ ٱلْفَلَقِ","مِن شَرِّ مَا خَلَقَ","وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ","وَمِن شَرِّ ٱلنَّفَّٰثَٰتِ فِى ٱلْعُقَدِ","وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ"]},
+{id:114,fr:"An-Nas",ar:"الناس",tr:"Les hommes",v:[
+"قُلْ أَعُوذُ بِرَبِّ ٱلنَّاسِ","مَلِكِ ٱلنَّاسِ","إِلَٰهِ ٱلنَّاسِ","مِن شَرِّ ٱلْوَسْوَاسِ ٱلْخَنَّاسِ","ٱلَّذِى يُوَسْوِسُ فِى صُدُورِ ٱلنَّاسِ","مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ"]}
+];
+
+/* ---------- Texte arabe ---------- */
+const norm=s=>s.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/g,"").replace(/[اأإآٱء]/g,"").replace(/ى/g,"ي").replace(/ة/g,"ه").replace(/ؤ/g,"و").replace(/ئ/g,"ي");
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,i)=>i);for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function sim(a,b){if(a===b)return 1;const L=Math.max(a.length,b.length);if(L<=2)return 0;return 1-lev(a,b)/L}
+const AR="٠١٢٣٤٥٦٧٨٩";const toAr=n=>String(n).replace(/\d/g,d=>AR[d]);
+const vl=(s,i)=>i<(s.off||0)?"Basmala":"verset "+(i+1-(s.off||0));
+
+/* ---------- Stockage (navigateur) ---------- */
+let mem=null;
+function load(){try{const r=localStorage.getItem("tartilm:v1");if(r)return JSON.parse(r)}catch(e){}return mem||{sessions:[],goal:1}}
+function save(d){mem=d;try{localStorage.setItem("tartilm:v1",JSON.stringify(d))}catch(e){}}
+let DB=load();
+const dkey=(d=new Date())=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+function dayCounts(){const m={};DB.sessions.forEach(s=>m[s.d]=(m[s.d]||0)+1);return m}
+function streak(){const m=dayCounts();let n=0;const d=new Date();if(!m[dkey(d)])d.setDate(d.getDate()-1);while(m[dkey(d)]){n++;d.setDate(d.getDate()-1)}return n}
+function best(sid){let b=null;DB.sessions.forEach(s=>{if(s.sid===sid&&!s.test&&s.done&&s.score!=null&&(b==null||s.score>b))b=s.score});return b}
+
+/* ---------- Icônes ---------- */
+const I={
+book:'<svg class="ic" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 5.5v16M9 8h7"/></svg>',
+search:'<svg class="ic" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+chart:'<svg class="ic" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
+mic:'<svg class="ic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+stop:'<svg class="ic" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>',
+back:'<svg class="ic" viewBox="0 0 24 24"><path d="M15 5 8 12l7 7"/></svg>',
+eye:'<svg class="ic" viewBox="0 0 24 24"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+flame:'<svg class="ic" viewBox="0 0 24 24" style="width:18px;height:18px;color:var(--gold)"><path d="M12 3c1 4 5 5 5 10a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-9z"/></svg>'
+};
+
+/* ---------- État ---------- */
+const S={tab:"home",rec:null};
+const $=s=>document.querySelector(s);
+function toast(t){const o=$(".toast");if(o)o.remove();const e=document.createElement("div");e.className="toast";e.textContent=t;e.setAttribute("role","status");document.body.appendChild(e);setTimeout(()=>e.remove(),3800)}
+function esc(s){return s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+/* ---------- Écrans principaux ---------- */
+function render(keep){
+  if(!keep)stopAll();
+  if(S.rec){renderRecite();return}
+  const app=$("#app");
+  let h="";
+  if(S.tab==="home")h=homeView();else if(S.tab==="search")h=searchView();else h=progressView();
+  app.innerHTML=h+nav();
+}
+function nav(){
+  const t=(k,ic,l)=>`<button data-act="tab" data-k="${k}" ${S.tab===k?'aria-current="page"':""}>${I[ic]}${l}</button>`;
+  return `<nav class="nav"><div class="nav-in">${t("home","book","Mémoriser")}${t("search","search","Rechercher")}${t("progress","chart","Progrès")}</div></nav>`;
+}
+function homeView(){
+  const today=dayCounts()[dkey()]||0,g=DB.goal,pct=Math.min(100,Math.round(today/g*100));
+  const rows=SURAHS.map(s=>{const b=best(s.id);return `<button class="srow" data-act="open" data-id="${s.id}">
+    <span class="num ${b!=null&&b>=.9?"done":""}">${b!=null?Math.round(b*100)+"%":s.id}</span>
+    <span class="nm"><b>${s.fr}</b><span class="muted">${s.tr} · ${s.v.length-(s.off||0)} versets</span></span>
+    <span class="ar">${s.ar}</span></button>`}).join("");
+  return `<div class="top"><h1 class="brand">Tartilm</h1><span class="chip">${I.flame}${streak()} j</span></div>
+  <section class="card goal"><span class="muted">Objectif du jour</span>
+  <b>${Math.min(today,g)} / ${g} séance${g>1?"s":""}</b>
+  <div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><i style="width:${pct}%"></i></div></section>
+  ${extraHome()}<h2 class="sec">Choisir une sourate</h2><p class="muted" style="margin:-4px 0 12px">Texte et correction selon la lecture de Warsh ’an Nafi’</p><div class="list">${rows}</div>`;
+}
+function searchView(){
+  const q=S.q||{text:"",res:null,busy:false};
+  let res="";
+  if(q.res){
+    res=q.res.length?q.res.map(r=>`<div class="res"><div class="muted">${r.s.fr} · ${vl(r.s,r.i)}</div><div class="ar">${esc(r.s.v[r.i])}</div>
+      <button class="btn sm" data-act="open" data-id="${r.s.id}">Réciter la sourate</button></div>`).join("")
+      :`<div class="res"><b>Aucun verset trouvé.</b><span class="muted">Récitez au moins quatre mots, ou saisissez le texte arabe. Seules les sourates de la liste sont disponibles pour l’instant.</span></div>`;
+  }else res=`<div class="res"><span class="muted">Appuyez sur le micro et récitez une phrase : Tartilm cherche le verset correspondant. Vous pouvez aussi saisir du texte arabe.</span></div>`;
+  return `<div class="top"><h1 class="brand">Recherche vocale</h1></div>
+  <div style="display:flex;gap:12px;align-items:center;margin-bottom:14px">
+  <button class="mic ${q.busy?"on":""}" data-act="vsearch" aria-label="${q.busy?"Arrêter":"Réciter pour chercher"}">${q.busy?I.stop:I.mic}</button>
+  <input id="qin" class="field" placeholder="اكتب آية" value="${esc(q.text||"")}" aria-label="Texte arabe à chercher"></div>
+  <button class="btn ghost sm" data-act="qgo">Chercher ce texte</button>
+  <div id="qres">${res}</div>`;
+}
+function progressView(){
+  const m=dayCounts(),days=[];const t=new Date();
+  for(let i=83;i>=0;i--){const d=new Date(t);d.setDate(t.getDate()-i);days.push(m[dkey(d)]||0)}
+  const heat=days.map(n=>`<i class="${n>=3?"l3":n==2?"l2":n==1?"l1":""}"></i>`).join("");
+  const scored=DB.sessions.filter(s=>s.score!=null);
+  const avg=scored.length?Math.round(scored.reduce((a,s)=>a+s.score,0)/scored.length*100)+"%":"–";
+  const mast=SURAHS.map(s=>{const b=best(s.id),p=b==null?0:Math.round(b*100);return `<div style="margin:12px 0"><div style="display:flex;justify-content:space-between"><b>${s.fr}</b><span class="muted">${b==null?"pas encore récitée":p+" %"}</span></div><div class="bar"><i style="width:${p}%"></i></div></div>`}).join("");
+  const agg={};DB.sessions.forEach(s=>(s.errs||[]).forEach(e=>{const k=e.sid+":"+e.v+":"+e.w;agg[k]=agg[k]||{...e,n:0};agg[k].n++}));
+  const errs=Object.values(agg).sort((a,b)=>b.n-a.n).slice(0,8);
+  const eh=errs.length?errs.map(e=>{const s=SURAHS.find(x=>x.id===e.sid);return `<div class="erow"><span class="a">${esc(e.w)}</span><span class="muted">${s.fr} · ${vl(s,e.v)}</span><b>×${e.n}</b></div>`}).join("")
+    :`<p class="muted" style="margin:6px 0 0">Aucune erreur enregistrée. Récitez en mode Masqué ou Voix pour repérer vos points faibles.</p>`;
+  return `<div class="top"><h1 class="brand">Progrès</h1><span class="chip">${I.flame}${streak()} j</span></div>
+  <div class="stats"><div class="stat"><b>${DB.sessions.length}</b><span>séances</span></div><div class="stat"><b>${streak()}</b><span>jours d’affilée</span></div><div class="stat"><b>${avg}</b><span>précision</span></div></div>
+  <h2 class="sec">12 dernières semaines</h2><div class="card"><div class="heat">${heat}</div></div>
+  <h2 class="sec">Maîtrise par sourate</h2><div class="card">${mast}</div>
+  <h2 class="sec">Erreurs fréquentes</h2><div class="card">${eh}</div>
+  <h2 class="sec">Objectif quotidien</h2><div class="card stepper"><button data-act="goal" data-d="-1" aria-label="Moins">−</button><b style="font-size:20px;flex:1;text-align:center">${DB.goal} séance${DB.goal>1?"s":""} par jour</b><button data-act="goal" data-d="1" aria-label="Plus">+</button></div>`;
+}
+
+/* ---------- Récitation ---------- */
+function openSurah(id,from,to,test){
+  const s=SURAHS.find(x=>x.id===id),words=[];
+  s.v.forEach((vt,vi)=>{if(vi<(from||0)||vi>=(to==null?s.v.length:to))return;vt.split(/\s+/).forEach((w,wi)=>words.push({v:vi,t:w,n:norm(w),last:false}))});
+  words.forEach((w,i)=>{const nx=words[i+1];if(!nx||nx.v!==w.v)w.last=true});
+  S.rec={s,words,test:test||null,mode:"masque",st:words.map(()=>null),peek:new Set(),p:0,listening:false,base:"",fin:"",int:"",glance:false,started:Date.now()};
+  render();window.scrollTo(0,0);
+}
+function renderRecite(){
+  const R=S.rec;
+  $("#app").innerHTML=`<div class="rtop"><button class="back" data-act="leave" aria-label="Retour">${I.back}</button><h2>${R.s.fr}</h2><span class="muted" id="prog"></span></div>
+  <div class="seg" role="group" aria-label="Mode">
+   <button data-act="mode" data-m="lire" aria-pressed="${R.mode==="lire"}">Lecture</button>
+   <button data-act="mode" data-m="masque" aria-pressed="${R.mode==="masque"}">Masqué</button>
+   <button data-act="mode" data-m="voix" aria-pressed="${R.mode==="voix"}">Voix</button></div>
+  <p class="muted" style="margin:10px 2px 0;font-size:14px">${{lire:"Lisez le texte à voix haute.",masque:"Récitez de mémoire. Touchez un mot masqué pour le révéler : il sera compté comme oubli.",voix:"Touchez le micro et récitez. Les mots apparaissent au fur et à mesure ; touchez un mot en rouge pour voir la correction."}[R.mode]}</p>
+  ${R.test?`<div class="card" style="margin-top:14px"><div class="muted">Question ${S.test.i+1} / ${S.test.qs.length} · récitez la suite</div><div lang="ar" dir="rtl" style="font-family:var(--quran);font-size:26px;line-height:2;margin-top:6px">${R.test.prompt}</div></div>`:""}<div class="page" id="page" lang="ar"></div>
+  <div class="rbar"><div class="rbar-in">
+   <button class="btn ghost sm" data-act="glance">${I.eye} Coup d’œil</button>
+   ${R.mode==="voix"?`<button class="mic ${R.listening?"on":""}" data-act="mic" aria-label="${R.listening?"Arrêter l’écoute":"Commencer à réciter"}">${R.listening?I.stop:I.mic}</button>`:`<button class="btn ghost sm" data-act="restart">Recommencer</button>`}
+   <button class="btn sm" data-act="finish">Terminer</button></div></div>`;
+  renderText();
+}
+function renderText(){
+  const R=S.rec,pg=$("#page");if(!pg)return;
+  let h="",pv=-1;
+  R.words.forEach((w,i)=>{
+    const st=R.st[i],pk=R.peek.has(i);
+    let c="";
+    const show=R.mode==="lire"||R.glance;
+    if(show)c=st?st.s:"";
+    else if(st)c=st.s;
+    else if(pk)c="peek";
+    else c="hid"+(R.mode==="voix"&&R.listening&&i===R.p?" cur":"");
+    const tab=c.startsWith("hid")||c==="err"?' tabindex="0" role="button"':"";
+    h+=`<span class="w ${c}" data-i="${i}"${tab}>${w.t}</span> `;
+    if(w.last&&w.v>=(R.s.off||0))h+=`<span class="vend${bmOn(R.s.id,w.v)?" bm":""}" data-act="bm" data-v="${w.v}" role="button" tabindex="0" aria-label="Signet">﴿<bdi>${w.v+1-(R.s.off||0)}</bdi>﴾</span> `;
+  });
+  pg.innerHTML=h;
+  const pr=$("#prog");if(pr){const done=R.mode==="voix"?R.p:(R.mode==="masque"?R.words.length-R.peek.size:R.words.length);pr.textContent=R.mode==="lire"?R.words.length+" mots":done+" / "+R.words.length}
+}
+function stats(){
+  const R=S.rec,tot=R.words.length;
+  let ok=0,errs=[];
+  if(R.mode==="voix"){R.st.forEach((x,i)=>{if(!x)return;if(x.s==="ok")ok++;else errs.push(i)});R.peek.forEach(i=>{if(!R.st[i])errs.push(i)});
+    const reached=Math.max(R.p,1);return{score:ok/reached,done:R.p>=Math.ceil(tot*.9),errs,reached:R.p}}
+  if(R.mode==="masque"){errs=[...R.peek];return{score:(tot-errs.length)/tot,done:true,errs,reached:tot}}
+  return{score:null,done:true,errs:[],reached:tot};
+}
+function finish(){
+  const R=S.rec;stopAll();
+  const st=stats();
+  if(R.mode==="voix"&&R.p===0&&!R.peek.size){toast("Aucune récitation détectée.");return}
+  const errs=st.errs.map(i=>({sid:R.s.id,v:R.words[i].v,w:R.words[i].t}));
+  DB.sessions.push({d:dkey(),sid:R.s.id,mode:R.mode,score:st.score,done:st.done,errs,test:!!R.test});
+  save(DB);
+  const pct=st.score==null?null:Math.round(st.score*100);if(R.test){testNext(pct==null?0:pct,errs.length);return}
+  openSheet(`<h3>Séance enregistrée</h3>
+  <p style="margin:0">${pct==null?"Lecture terminée.":`Précision : <b>${pct} %</b> · ${errs.length} erreur${errs.length>1?"s":""}.`}</p>
+  ${!st.done?`<p class="muted" style="margin:0">Sourate récitée en partie : elle ne compte pas encore dans la maîtrise.</p>`:""}
+  <button class="btn" data-act="leave2">Retour aux sourates</button>
+  <button class="btn ghost" data-act="again">Réciter encore</button>`);
+}
+
+/* ---------- Alignement vocal ---------- */
+function align(exp,heard,lastPending){
+  const st=exp.map(()=>null);let p=0;
+  for(let hi=0;hi<heard.length;hi++){
+    if(p>=exp.length)break;
+    const raw=heard[hi],h=norm(raw);if(!h)continue;
+    const isLast=lastPending&&hi===heard.length-1;
+    if(sim(h,exp[p].n)>=.72){st[p]={s:"ok"};p++;continue}
+    let f=-1;
+    for(let k=1;k<=2&&p+k<exp.length;k++){if(sim(h,exp[p+k].n)>=.8){f=p+k;break}}
+    if(f>-1){for(let j=p;j<f;j++)st[j]={s:"err",heard:"",kind:"oubli"};st[f]={s:"ok"};p=f+1}
+    else if(!isLast){st[p]={s:"err",heard:raw,kind:"mot"};p++}
+  }
+  return{st,p};
+}
+let REC=null;
+function SRClass(){return window.SpeechRecognition||window.webkitSpeechRecognition}
+function nativeSR(){const C=window.Capacitor;return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.SpeechRecognition}
+/* Moteur navigateur (Chrome) */
+function webRec(cfg){
+  const SR=SRClass();if(!SR)return null;
+  let base="",fin="",it="",on=true;
+  const r=new SR();r.lang="ar-SA";r.continuous=cfg.continuous;r.interimResults=cfg.continuous;
+  r.onresult=e=>{
+    fin="";it="";
+    for(let i=0;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal)fin+=" "+t;else it+=" "+t}
+    cfg.onText((base+" "+fin+" "+it).trim(),!!it.trim());
+  };
+  r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed"){on=false;cfg.onDenied()}};
+  r.onend=()=>{
+    if(!on)return;
+    if(cfg.continuous){base=(base+" "+fin+" "+it).trim();fin="";it="";try{r.start()}catch(e){}}
+    else{on=false;cfg.onEnd&&cfg.onEnd()}
+  };
+  return{async start(){r.start();return true},stop(){on=false;try{r.onend=null;r.stop()}catch(e){}}};
+}
+/* Moteur Android natif (APK Capacitor) */
+function nativeRec(cfg){
+  const P=nativeSR();if(!P)return null;
+  let base="",cur="",on=true;const hs=[];
+  const go=()=>P.start({language:"ar-SA",maxResults:1,partialResults:true,popup:false}).catch(()=>{if(on){on=false;cfg.onFail&&cfg.onFail()}});
+  return{
+    async start(){
+      try{const pm=await P.requestPermissions();if(pm&&pm.speechRecognition&&pm.speechRecognition!=="granted"){on=false;cfg.onDenied();return false}}catch(e){}
+      hs.push(await P.addListener("partialResults",e=>{cur=(e.matches&&e.matches[0])||"";cfg.onText((base+" "+cur).trim(),true)}));
+      hs.push(await P.addListener("listeningState",e=>{
+        if(e.status!=="stopped"||!on)return;
+        cfg.onText((base+" "+cur).trim(),false);
+        if(cfg.continuous){base=(base+" "+cur).trim();cur="";setTimeout(()=>{if(on)go()},250)}
+        else{on=false;cfg.onEnd&&cfg.onEnd()}
+      }));
+      go();return true;
+    },
+    stop(){on=false;try{P.stop()}catch(e){}hs.forEach(h=>{try{h.remove()}catch(e){}})}
+  };
+}
+function makeRec(cfg){return nativeRec(cfg)||webRec(cfg)}
+function stopAll(){
+  if(S.rec)S.rec.listening=false;
+  if(REC){try{REC.stop()}catch(e){}REC=null}
+}
+async function startMic(){
+  const R=S.rec;
+  R.st=R.words.map(()=>null);R.p=0;R.peek.clear();
+  const rec=makeRec({
+    continuous:true,
+    onText:(all,pending)=>{
+      if(S.rec!==R)return;
+      const a=align(R.words,all.split(/\s+/).filter(Boolean),pending);R.st=a.st;R.p=a.p;renderText();
+      if(R.p>=R.words.length){stopAll();renderRecite();toast("Sourate terminée. Touchez Terminer pour enregistrer.")}
+    },
+    onDenied:()=>{R.listening=false;REC=null;toast("Micro bloqué. Autorisez-le dans les réglages, ou utilisez le mode Masqué.");if(S.rec===R)renderRecite()},
+    onFail:()=>{R.listening=false;REC=null;toast("La reconnaissance vocale s’est arrêtée.");if(S.rec===R)renderRecite()}
+  });
+  if(!rec){toast("La reconnaissance vocale n’est pas disponible ici. Utilisez le mode Masqué.");return}
+  REC=rec;R.listening=true;renderRecite();
+  try{const ok=await rec.start();if(!ok&&S.rec===R){R.listening=false;REC=null;renderRecite()}}
+  catch(e){R.listening=false;REC=null;toast("Impossible de démarrer le micro.");if(S.rec===R)renderRecite()}
+}
+
+/* ---------- Recherche ---------- */
+function searchVerses(text){
+  const q=text.trim().split(/\s+/).map(norm).filter(Boolean);if(!q.length)return[];
+  const out=[];
+  SURAHS.forEach(s=>s.v.forEach((vt,i)=>{
+    const vw=vt.split(/\s+/).map(norm);let hit=0;
+    q.forEach(w=>{if(vw.some(x=>sim(w,x)>=.8))hit++});
+    if(hit>=Math.min(2,q.length))out.push({s,i,score:hit/q.length*.7+hit/vw.length*.3});
+  }));
+  return out.sort((a,b)=>b.score-a.score).slice(0,3);
+}
+async function voiceSearch(){
+  S.q=S.q||{text:"",res:null,busy:false};
+  if(S.q.busy){stopAll();S.q.busy=false;render();return}
+  const fail=m=>{REC=null;S.q.busy=false;if(m)toast(m);render()};
+  const rec=makeRec({
+    continuous:false,
+    onText:all=>{S.q.text=all},
+    onEnd:()=>{REC=null;S.q.busy=false;S.q.res=searchVerses(S.q.text||"");render()},
+    onDenied:()=>fail("Micro bloqué. Autorisez-le ou saisissez le texte arabe."),
+    onFail:()=>fail("")
+  });
+  if(!rec){toast("La reconnaissance vocale n’est pas disponible ici. Saisissez le texte arabe.");return}
+  S.q.text="";REC=rec;S.q.busy=true;render(true);
+  try{const ok=await rec.start();if(!ok&&S.q.busy)fail("")}
+  catch(e){fail("Impossible de démarrer le micro.")}
+}
+
+/* ---------- Mode Test et signets ---------- */
+const bmOn=(sid,v)=>(DB.bm||[]).includes(sid+":"+v);
+function toggleBm(sid,v){DB.bm=DB.bm||[];const k=sid+":"+v,i=DB.bm.indexOf(k);if(i>=0)DB.bm.splice(i,1);else DB.bm.push(k);save(DB)}
+function extraHome(){
+  const bms=(DB.bm||[]).map(k=>{const[a,b]=k.split(":").map(Number);const s=SURAHS.find(x=>x.id===a);return `<button class="srow" data-act="open" data-id="${a}"><span class="nm"><b>${s.fr}</b><span class="muted">${vl(s,b)}</span></span><span class="ar">${esc(s.v[b].split(/\s+/).slice(0,3).join(" "))}…</span></button>`}).join("");
+  return `<h2 class="sec">Tester ma mémoire</h2><div class="card" style="display:grid;gap:12px"><span class="muted">5 questions : le verset précédent s’affiche, vous récitez la suite.</span><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn sm" data-act="test" data-k="rand">Au hasard</button><button class="btn ghost sm" data-act="test" data-k="weak">Maillon faible</button></div></div>${bms?`<h2 class="sec">Signets</h2><div class="list">${bms}</div>`:""}`;
+}
+function mkQ(sid,v){const s=SURAHS.find(x=>x.id===sid);return{sid,from:v,to:v+Math.min(2,s.v.length-v)}}
+function startTest(kind){
+  let qs=[];
+  if(kind==="weak"){
+    const agg={};DB.sessions.forEach(x=>(x.errs||[]).forEach(e=>{const k=e.sid+":"+e.v;agg[k]=(agg[k]||0)+1}));
+    const top=Object.entries(agg).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    if(!top.length){toast("Pas encore d’erreurs enregistrées. Récitez d’abord quelques sourates.");return}
+    qs=top.map(([k])=>{const[a,b]=k.split(":").map(Number);return mkQ(a,b)});
+  }else{
+    for(let i=0;i<5;i++){const s=SURAHS[Math.floor(Math.random()*SURAHS.length)];const lo=(s.off||0)+1;qs.push(mkQ(s.id,lo+Math.floor(Math.random()*(s.v.length-lo))))}
+  }
+  S.test={kind,qs,i:0,res:[]};askQ();
+}
+function askQ(){
+  const q=S.test.qs[S.test.i],s=SURAHS.find(x=>x.id===q.sid);
+  openSurah(q.sid,q.from,q.to,{prompt:q.from>0?s.v[q.from-1]:"سورة "+s.ar});
+}
+function testNext(pct,nerr){
+  const T=S.test;T.res.push({pct,nerr});
+  const pl=n=>n+" erreur"+(n>1?"s":"");
+  if(T.i+1<T.qs.length){
+    openSheet(`<h3>Question ${T.i+1} terminée</h3><p style="margin:0">Précision : <b>${pct} %</b> · ${pl(nerr)}.</p><button class="btn" data-act="qnext">Question suivante</button>`);
+  }else{
+    const avg=Math.round(T.res.reduce((a,x)=>a+x.pct,0)/T.res.length),tot=T.res.reduce((a,x)=>a+x.nerr,0);
+    openSheet(`<h3>Test terminé</h3><p style="margin:0">Score moyen : <b>${avg} %</b> sur ${T.res.length} questions · ${pl(tot)} au total.</p><button class="btn" data-act="leave2">Retour aux sourates</button><button class="btn ghost" data-act="retest" data-k="${T.kind}">Refaire un test</button>`);
+  }
+}
+
+/* ---------- Feuille modale ---------- */
+function openSheet(html){$("#layer").innerHTML=`<div class="sheet-bg" data-act="closesheet"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`}
+function closeSheet(){$("#layer").innerHTML=""}
+
+/* ---------- Événements ---------- */
+document.addEventListener("click",e=>{
+  const w=e.target.closest(".w");
+  if(w&&S.rec){
+    const i=+w.dataset.i,R=S.rec;
+    if(w.classList.contains("err")){
+      const x=R.st[i];
+      openSheet(`<h3>Correction</h3><div class="muted">Attendu</div><div class="ar">${R.words[i].t}</div>
+      <div class="muted">${x.kind==="oubli"?"Mot oublié":"Entendu : "+esc(x.heard||"–")}</div><button class="btn" data-act="closesheet2">Compris</button>`);
+    }else if(w.classList.contains("hid")){R.peek.add(i);renderText()}
+    return;
+  }
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const a=b.dataset.act,R=S.rec;
+  if(a==="closesheet"){if(e.target===b)closeSheet();return}
+  if(a==="closesheet2"){closeSheet();return}
+  if(a==="tab"){S.tab=b.dataset.k;render();window.scrollTo(0,0)}
+  else if(a==="open"){openSurah(+b.dataset.id)}
+  else if(a==="leave"){stopAll();S.rec=null;S.test=null;render()}
+  else if(a==="leave2"){closeSheet();S.rec=null;S.test=null;S.tab="home";render()}
+  else if(a==="again"){closeSheet();openSurah(R.s.id)}
+  else if(a==="mode"){stopAll();R.mode=b.dataset.m;R.st=R.words.map(()=>null);R.peek.clear();R.p=0;renderRecite()}
+  else if(a==="restart"){R.st=R.words.map(()=>null);R.peek.clear();R.p=0;renderText()}
+  else if(a==="mic"){R.listening?(stopAll(),renderRecite()):startMic()}
+  else if(a==="finish"){finish()}
+  else if(a==="glance"){R.glance=!R.glance;renderText();b.style.opacity=R.glance?.6:1}
+  else if(a==="goal"){DB.goal=Math.max(1,Math.min(10,DB.goal+ +b.dataset.d));save(DB);render()}
+  else if(a==="vsearch"){voiceSearch()}
+  else if(a==="test"||a==="retest"){closeSheet();startTest(b.dataset.k)}
+  else if(a==="qnext"){closeSheet();S.test.i++;askQ()}
+  else if(a==="bm"){toggleBm(R.s.id,+b.dataset.v);renderText()}
+  else if(a==="qgo"){const t=($("#qin")||{}).value||"";S.q={text:t,res:searchVerses(t),busy:false};render()}
+});
+document.addEventListener("keydown",e=>{
+  if((e.key==="Enter"||e.key===" ")&&e.target.classList&&(e.target.classList.contains("w")||e.target.classList.contains("vend"))){e.preventDefault();e.target.click()}
+  if(e.key==="Enter"&&e.target.id==="qin"){const b=document.querySelector('[data-act="qgo"]');if(b)b.click()}
+});
+if("serviceWorker" in navigator&&location.protocol.indexOf("http")===0&&!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform())){
+  window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+}
+render();
+</script>
+</body>
+</html>
