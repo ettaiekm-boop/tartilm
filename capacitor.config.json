@@ -1,0 +1,7 @@
+{
+  "appId": "com.tartilm.app",
+  "appName": "Tartilm",
+  "webDir": "www",
+  "backgroundColor": "#0B2528",
+  "android": { "backgroundColor": "#0B2528" }
+}
